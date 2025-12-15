@@ -63,16 +63,26 @@ def fill_nans_nearest(x, y, v, Xg, Yg, Zg):
 st.sidebar.header("Pengaturan Pemetaan Gravitasi")
 uploaded = st.sidebar.file_uploader("Upload CSV (Kolom X, Y, Anomali Bouguer)", type=["csv"])
 st.sidebar.caption("Pastikan kolom 'value' berisi Anomali Bouguer (mGal).")
-
 unit_label = "mGal"
-
 st.sidebar.subheader("Pengaturan Grid & Interpolasi")
 method = st.sidebar.selectbox("Metode interpolasi", ["linear", "cubic", "nearest"], index=0)
 nx = st.sidebar.slider("Resolusi grid (X)", 50, 400, 200, step=25)
 ny = st.sidebar.slider("Resolusi grid (Y)", 50, 400, 200, step=25)
 fill_holes = st.sidebar.checkbox("Isi lubang (NaN) pakai nearest", value=True)
-
 st.sidebar.subheader("Pengaturan Visualisasi")
 show_scatter = st.sidebar.checkbox("Tampilkan titik data di atas peta", value=True)
 show_contours = st.sidebar.checkbox("Tampilkan garis kontur", value=True)
 n_contours = st.sidebar.slider("Jumlah kontur", 5, 40, 15, step=1)
+# ---------- Main Execution ----------
+if uploaded is None:
+    st.info("Upload file CSV data gravitasi (Anomali Bouguer) untuk memulai pemetaan.")
+    st.stop()
+try:
+    # Membaca file CSV yang diunggah
+    df_raw = pd.read_csv(uploaded)
+    # Memvalidasi dan membersihkan data
+    df = validate_df(df_raw)
+    st.success("Data berhasil diunggah dan divalidasi!") 
+except Exception as e:
+    st.error(f"Gagal membaca/validasi data: {e}")
+    st.stop()
