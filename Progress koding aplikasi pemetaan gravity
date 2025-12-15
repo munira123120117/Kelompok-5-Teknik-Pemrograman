@@ -9,3 +9,15 @@ from matplotlib import cm
 st.set_page_config(page_title="Pemetaan Gravity", layout="wide")
 st.title("Aplikasi Desain Pemetaan Gravity!")
 st.markdown("Masukan data pada sidebar untuk membuat peta kontur")
+# Mencoba me-rename kolom umum ke nama standar: X, Y, value
+    rename_try = {}
+    for c in df.columns:
+        lc = c.lower()
+        if lc in ["x", "easting", "lon", "longitude"]:
+            rename_try[c] = "X"
+        elif lc in ["y", "northing", "lat", "latitude"]:
+            rename_try[c] = "Y"
+        # Kolom Nilai/Anomali
+        elif lc in ["z", "val", "value", "anomali", "anomaly", "gravity", "bouguer", "mgal"]:
+            rename_try[c] = "value"
+    df = df.rename(columns=rename_try)
