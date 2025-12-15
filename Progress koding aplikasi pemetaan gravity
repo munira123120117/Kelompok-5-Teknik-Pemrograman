@@ -21,3 +21,41 @@ st.markdown("Masukan data pada sidebar untuk membuat peta kontur")
         elif lc in ["z", "val", "value", "anomali", "anomaly", "gravity", "bouguer", "mgal"]:
             rename_try[c] = "value"
     df = df.rename(columns=rename_try)
+# Memeriksa kolom wajib
+    missing = [c for c in REQUIRED_COLS if c not in df.columns]
+    if missing:
+        raise ValueError(f"Kolom wajib belum lengkap. Harus ada: {REQUIRED_COLS}. Missing: {missing}")
+
+    df = df[REQUIRED_COLS].copy()
+    df = df.dropna()
+
+    # Memastikan data numerik
+    for c in REQUIRED_COLS:
+        df[c] = pd.to_numeric(df[c], errors="coerce")
+    df = df.dropna()
+
+    if len(df) < 5:
+        raise ValueError("Data terlalu sedikit setelah dibersihkan. Minimal ~5 titik.")
+
+    return df
+
+def make_grid(df: pd.DataFrame, nx: int, ny: int):
+    x = df["X"].to_numpy()
+    y = df["Y"].to_numpy()
+    v = df["value"].to_numpy()
+
+    xi = np.linspace(x.min(), x.max(), nx)
+    yi = np.linspace(y.min(), y.max(), ny)
+    Xg, Yg = np.meshgrid(xi, yi)
+    return x, y, v, Xg, Yg
+
+def interpolate_grid(x, y, v, Xg, Yg, method: str):
+    Zg = griddata(points=(x, y), values=v, xi=(Xg, Yg), method=method)
+    return Zg
+
+def fill_nans_nearest(x, y, v, Xg, Yg, Zg):
+    # Jika interpolasi membuat lubang (NaN), isi dengan nearest
+    if np.isnan(Zg).any():
+        Z_near = griddata((x, y), v, (Xg, Yg), method="nearest")
+        Zg = np.where(np.isnan(Zg), Z_near, Zg)
+    return Zg
