@@ -125,3 +125,13 @@ ax.set_title(f"Peta Anomali Bouguer | Interpolasi: {method} | Grid: {nx}x{ny}")
 ax.set_aspect("equal", adjustable="box")
 
 st.pyplot(fig, use_container_width=True)
+
+# Interpretasi Khusus Gravitasi
+st.markdown("---")
+st.subheader("Interpretasi Geologi Sederhana Anomali Gravitasi")
+st.markdown("""
+Peta Anomali Bouguer mencerminkan variasi lateral densitas batuan di bawah permukaan. 
+
+* Anomali Positif (Area Merah/Panas): Batuan dengan densitas tinggi (lebih padat) berada relatif dekat dengan permukaan, mengindikasikan struktur seperti Intrusi batuan beku atau Horst (punggungan) basement.
+* Anomali Negatif (Area Biru/Dingin): Batuan dengan densitas rendah (kurang padat) menempati volume yang signifikan, mengindikasikan struktur seperti Cekungan sedimen tebal atau Graben.
+""")
