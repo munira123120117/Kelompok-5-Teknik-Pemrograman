@@ -135,3 +135,7 @@ Peta Anomali Bouguer mencerminkan variasi lateral densitas batuan di bawah permu
 * Anomali Positif (Area Merah/Panas): Batuan dengan densitas tinggi (lebih padat) berada relatif dekat dengan permukaan, mengindikasikan struktur seperti Intrusi batuan beku atau Horst (punggungan) basement.
 * Anomali Negatif (Area Biru/Dingin): Batuan dengan densitas rendah (kurang padat) menempati volume yang signifikan, mengindikasikan struktur seperti Cekungan sedimen tebal atau Graben.
 """)
+
+# Export grid to CSV
+st.subheader("Ekspor Grid Anomali Bouguer")
+export = st.checkbox("Siapkan file grid (CSV) untuk diunduh", value=False)
