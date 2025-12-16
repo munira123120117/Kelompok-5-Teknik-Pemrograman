@@ -139,3 +139,18 @@ Peta Anomali Bouguer mencerminkan variasi lateral densitas batuan di bawah permu
 # Export grid to CSV
 st.subheader("Ekspor Grid Anomali Bouguer")
 export = st.checkbox("Siapkan file grid (CSV) untuk diunduh", value=False)
+
+if export:
+    # Flatten the grid data
+    grid_df = pd.DataFrame({
+        "X": Xg.ravel(),
+        "Y": Yg.ravel(),
+        f"Bouguer_Anomaly_{unit_label}": Zg.ravel()
+    })
+    csv_bytes = grid_df.to_csv(index=False).encode("utf-8")
+    st.download_button(
+        label="Download grid CSV Anomali Bouguer",
+        data=csv_bytes,
+        file_name=f"grid_bouguer_anomaly.csv",
+        mime="text/csv"
+    )
