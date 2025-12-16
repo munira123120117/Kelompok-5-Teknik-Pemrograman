@@ -111,3 +111,17 @@ st.subheader(f"Peta Kontur Anomali Bouguer ({unit_label})")
 fig, ax = plt.subplots(figsize=(10, 7))
 hm = ax.pcolormesh(Xg, Yg, Zg, shading="auto", cmap='jet') 
 plt.colorbar(hm, ax=ax, label=f"Anomali Bouguer ({unit_label})")
+
+if show_contours:
+    cs = ax.contour(Xg, Yg, Zg, levels=n_contours, linewidths=0.8, colors='k')
+    ax.clabel(cs, inline=True, fontsize=8, fmt='%.1f')
+
+if show_scatter:
+    ax.scatter(x, y, s=12, c='none', marker="o", edgecolor="k", linewidth=0.3)
+
+ax.set_xlabel("X (Koordinat)")
+ax.set_ylabel("Y (Koordinat)")
+ax.set_title(f"Peta Anomali Bouguer | Interpolasi: {method} | Grid: {nx}x{ny}")
+ax.set_aspect("equal", adjustable="box")
+
+st.pyplot(fig, use_container_width=True)
