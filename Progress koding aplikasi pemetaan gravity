@@ -86,3 +86,28 @@ try:
 except Exception as e:
     st.error(f"Gagal membaca/validasi data: {e}")
     st.stop()
+Jika validasi berhasil, lanjutkan ke pemrosesan dan plotting
+
+st.subheader("Preview Data Anomali Bouguer")
+st.dataframe(df.head(20), use_container_width=True)
+
+# Summary stats
+c1, c2, c3, c4 = st.columns(4)
+c1.metric("Jumlah titik", f"{len(df)}")
+c2.metric("X min–max", f"{df['X'].min():.3g} – {df['X'].max():.3g}")
+c3.metric("Y min–max", f"{df['Y'].min():.3g} – {df['Y'].max():.3g}")
+c4.metric(f"Bouguer Anomaly ({unit_label})", f"{df['value'].min():.3g} – {df['value'].max():.3g}")
+
+# Make grid & interpolate
+with st.spinner("Membuat grid dan menginterpolasi..."):
+    x, y, v, Xg, Yg = make_grid(df, nx, ny)
+    Zg = interpolate_grid(x, y, v, Xg, Yg, method=method)
+    if fill_holes:
+        Zg = fill_nans_nearest(x, y, v, Xg, Yg, Zg)
+        
+# Plot 
+st.subheader(f"Peta Kontur Anomali Bouguer ({unit_label})")
+
+fig, ax = plt.subplots(figsize=(10, 7))
+hm = ax.pcolormesh(Xg, Yg, Zg, shading="auto", cmap='jet') 
+plt.colorbar(hm, ax=ax, label=f"Anomali Bouguer ({unit_label})")
