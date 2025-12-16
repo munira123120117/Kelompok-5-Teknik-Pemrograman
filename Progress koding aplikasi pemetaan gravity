@@ -154,3 +154,4 @@ if export:
         file_name=f"grid_bouguer_anomaly.csv",
         mime="text/csv"
     )
+st.caption("Catatan: Interpolasi tidak dapat menggantikan pemodelan 2D/3D. Peta ini adalah visualisasi cepat untuk interpretasi awal.")
